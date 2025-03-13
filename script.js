@@ -5,7 +5,7 @@ let listaBarcos = [
     { "name": "Submarino", "size": 3 },
     { "name": "Destructor", "size": 2 }
 ];
- 
+
 console.log("Tablero:");
 
 class Tablero {
@@ -21,25 +21,87 @@ class Tablero {
     }
 
     crearTablero() {
-        for(let i = 0; i<this.tamaño; i++) {
+        for (let i = 0; i < this.tamaño; i++) {
             this.celdas[i] = [];
-            for(let j = 0; j<this.tamaño; j++) {
-                this.celdas[i][j] = new Celda(i,j);
+            for (let j = 0; j < this.tamaño; j++) {
+                this.celdas[i][j] = new Celda(i, j);
             }
         }
 
     }
 
-    guardarBarcos() {
-
+    guardarBarcos(listaBarcos) {
+        this.barcos = listaBarcos.map(barco => new Barco(barco.name, barco.size))
     }
 
     posicionarBarcos() {
+        for (let barco of this.barcos) {
+            let barcoColocado = false;
+
+            while (!barcoColocado) {
+                let orientacion = Math.random() === 0 ? "H" : "V";
+                let fila = this.numeroRandom(0, this.tamaño - 1);
+                let columna = this.numeroRandom(0, this.tamaño - 1);
+
+                let hayEspacio = this.verificarEspacio(barco, orientacion, fila, columna);
+
+                if (hayEspacio) {
+                    this.colocarBarco(barco, orientacion, fila, columna);
+                    barcoColocado = true;
+                }
+            }
+
+        }
 
     }
 
-    verificarEspacio() {
+    verificarEspacio(barco, orientacion, fila, columna) {
+        if (orientacion === "H") {
+            if (columna + barco.tamaño > this.tamaño) {
+                return false;
+            }
 
+            for (let i = 0; i < barco.tamaño; i++) {
+                if (this.celdas[fila][columna + i].ocupada) {
+                    return false;
+                }
+            }
+
+        } else if (orientacion === "V") {
+            if (fila + barco.tamaño > this.tamaño) {
+                return false;
+            }
+
+            for (let j = 0; j < barco.tamaño; j++) {
+                if (this.celdas[fila + j][columna].ocupada) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    }
+
+    colocarBarco(barco, orientacion, fila, columna) {
+        if(orientacion === "H") {
+            for (let i = 0; i < barco.tamaño; i++) {
+            this.celdas[fila][columna + i].ocupada = true;
+            this.celdas[fila][columna + i].nombreBarco = barco.nombre;
+            barco.posiciones.push({x: fila, y: columna + i});
+        }
+     } else {
+            for (let j = 0; j < barco.tamaño; j++) {
+             this.celdas[fila + j][columna].ocupada = true;
+             this.celdas[fila + j][columna].nombreBarco = barco.nombre;
+             barco.posiciones.push({x: fila + j, y: columna});       
+                
+            }
+        }
+    }
+
+    numeroRandom(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 
@@ -52,7 +114,7 @@ class Celda {
     impactada;
     nombreBarco;
 
-    constructor(x,y,ocupada,impactada,nombreBarco) {
+    constructor(x, y, ocupada, impactada, nombreBarco) {
         this.x = x;
         this.y = y;
         this.ocupada = false;
@@ -69,7 +131,7 @@ class Barco {
     constructor(nombre, tamaño, posiciones) {
         this.nombre = nombre;
         this.tamaño = tamaño;
-        this.posiciones = posiciones;
+        this.posiciones = [];
     }
 }
 
@@ -96,3 +158,31 @@ let tablero = new Tablero(10);
 console.log(tablero);
 
 
+console.log(Math.random() < 0.5 ? 'H' : 'V');
+
+console.log(Math.floor(Math.random() * 10));
+
+tablero.guardarBarcos(listaBarcos);
+tablero.posicionarBarcos();
+
+console.log(tablero);
+
+
+
+/***
+ * 
+ * 
+ *      0   1   2   3   4   5   6   7   8   9
+ *  0   -   -   -   -   -   -   -   -   -   -
+ *  1   -   -   -   -   -   -   -   -   -   -
+ *  2   -   -   -   -   -   -   -   -   -   -   
+ *  3   -   -   -   -   -   -   -   -   -   -
+ *  4   -   -   -   -   -   -   -   -   -   -
+ *  5   -   -   -   -   -   -   -   -   -   -
+ *  6   -   -   -   -   -   -   -   -   -   -
+ *  7   -   -   -   -   -   -   -   -   -   -
+ *  8   -   -   -   -   -   -   -   -   -   -
+ *  9   -   -   -   -   -   -   -   -   -   -
+ * 
+ * 
+ */
