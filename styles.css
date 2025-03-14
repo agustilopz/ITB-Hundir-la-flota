@@ -1,0 +1,24 @@
+#tablero {
+    display: grid;
+    grid-template-columns: repeat(10, 30px); /* 10 columnas de 30px */
+    grid-template-rows: repeat(10, 30px); /* 10 filas de 30px */
+    gap: 1px; /* Espacio entre celdas */
+}
+
+.celda {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000; /* Bordes para cada celda */
+    cursor: pointer;
+}
+
+.ocupada {
+    background-color: gray; /* Color de las celdas ocupadas por barcos */
+}
+
+.vacía {
+    background-color: lightblue; /* Color de las celdas vacías */
+}
