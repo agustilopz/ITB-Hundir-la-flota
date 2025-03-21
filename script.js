@@ -45,7 +45,7 @@ class Tablero {
             let barcoColocado = false;
 
             while (!barcoColocado) {
-                let orientacion = Math.random() === 0 ? "H" : "V";
+                let orientacion = Math.random() < 0.5 ? "H" : "V";
                 let fila = this.numeroRandom(0, this.tamaño - 1);
                 let columna = this.numeroRandom(0, this.tamaño - 1);
 
@@ -96,7 +96,7 @@ class Tablero {
             this.celdas[fila][columna + i].nombreBarco = barco.nombre;
             barco.posiciones.push({x: fila, y: columna + i});
         }
-     } else {
+     } else  {
             for (let j = 0; j < barco.tamaño; j++) {
              this.celdas[fila + j][columna].ocupada = true;
              this.celdas[fila + j][columna].nombreBarco = barco.nombre;
@@ -164,7 +164,7 @@ let tablero = new Tablero(10);
 console.log(tablero);
 
 
-console.log(Math.random() < 0.5 ? 'H' : 'V');
+//console.log(Math.random() < 0.5 ? 'H' : 'V');
 
 console.log(Math.floor(Math.random() * 10));
 
