@@ -27,7 +27,7 @@ export class Tablero {
         this.barcos = listaBarcos.map(barco => new Barco(barco.name, barco.size))
     }
 
-    posicionarBarcos() {
+    posicionarBarcosAleatorio() {
         for (let barco of this.barcos) {
             let barcoColocado = false;
 
@@ -36,6 +36,23 @@ export class Tablero {
                 let fila = this.numeroRandom(0, this.tamaño - 1);
                 let columna = this.numeroRandom(0, this.tamaño - 1);
 
+                let hayEspacio = this.verificarEspacio(barco, orientacion, fila, columna);
+
+                if (hayEspacio) {
+                    this.colocarBarco(barco, orientacion, fila, columna);
+                    barcoColocado = true;
+                }
+            }
+
+        }
+
+    }
+
+    posicionarBarcos(orientacion, fila, columna) {
+        for (let barco of this.barcos) {
+            let barcoColocado = false;
+
+            while (!barcoColocado) {
                 let hayEspacio = this.verificarEspacio(barco, orientacion, fila, columna);
 
                 if (hayEspacio) {

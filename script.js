@@ -23,7 +23,7 @@ console.log(tablero);
 console.log(Math.floor(Math.random() * 10));
 
 tablero.guardarBarcos(listaBarcos);
-tablero.posicionarBarcos();
+tablero.posicionarBarcosAleatorio();
 
 console.log(tablero);
 
