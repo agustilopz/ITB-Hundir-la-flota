@@ -1,4 +1,4 @@
-#tablero {
+#tablero1, #tablero2 {
     display: grid;
     grid-template-columns: repeat(10, 30px); /* 10 columnas de 30px */
     grid-template-rows: repeat(10, 30px); /* 10 filas de 30px */
@@ -21,4 +21,11 @@
 
 .vacía {
     background-color: lightblue; /* Color de las celdas vacías */
+}
+
+.juego {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+
 }

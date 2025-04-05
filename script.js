@@ -10,6 +10,9 @@ let jsonBarcos = `[
     { "name": "Destructor", "size": 2 }
 ]`;
 
+let barcoSeleccionado = null;
+let posicionamentBarco = 'V';
+
 let listaBarcos = JSON.parse(jsonBarcos);
 
 console.log("Lista barcos convertida del JSON:" + listaBarcos);
@@ -22,13 +25,12 @@ console.log(tablero);
 
 console.log(Math.floor(Math.random() * 10));
 
-tablero.guardarBarcos(listaBarcos);
-tablero.posicionarBarcosAleatorio();
+//tablero.guardarBarcos(listaBarcos);
+//tablero.posicionarBarcosAleatorio();
 
 console.log(tablero);
 
-function imprimirTablero(tablero) {
-    let contenedor = document.getElementById('tablero');
+function imprimirTablero(tablero, contenedor) {
 
     contenedor.innerHTML = '';
 
@@ -38,6 +40,19 @@ function imprimirTablero(tablero) {
             let clase = celda.ocupada ? 'ocupada' : 'vacía'; // Dependiendo de si está ocupada o no, le asignamos una clase
             let celdaDiv = document.createElement('div');
             celdaDiv.classList.add('celda', clase);
+
+            celdaDiv.addEventListener("click", function(event) {
+                if(barcoSeleccionado===null) {
+                    alert("No has seleccionado ningún barco")
+                } else {
+                console.log(`Fila ${i}, columna ${j}`);
+                tablero.posicionarBarco(posicionamentBarco,i,j,barcoSeleccionado);
+                barcoSeleccionado = null;
+                imprimirTablero(tablero, contenedor);
+                }
+            });
+
+
             //celdaDiv.dataset.x = celda.x;
             //celdaDiv.dataset.y = celda.y;
 
@@ -52,8 +67,40 @@ function imprimirTablero(tablero) {
     }
 }
 
+let contenedor1 = document.getElementById('tablero1');
+
+
 // Llamada a la función para mostrar el tablero en HTML
-imprimirTablero(tablero);
+imprimirTablero(tablero,contenedor1);
+
+let contenedorBarcos = document.getElementById('barcos');
+for(let barco of listaBarcos) {
+    //let boton = `<button id="${barco.name.toLowerCase()}">${barco.name}-${barco.size}</button>`;
+
+    let boton = document.createElement('button');
+    boton.id = barco.name.toLowerCase();
+    boton.textContent = `${barco.name}-${barco.size}`;
+    boton.addEventListener("click", function() {
+        alert("CLICKKKK");
+        barcoSeleccionado=barco;
+        boton.disabled=true;
+    })
+    
+    contenedorBarcos.appendChild(boton);
+
+}
+
+document.addEventListener("keypress", function(event){
+
+    if(event.key === "R" || event.key === "r") {
+        if(posicionamentBarco==='V') {
+            posicionamentBarco='H';
+        } else {
+            posicionamentBarco='V';
+        }
+        alert(posicionamentBarco);
+    }
+})
 
 
 
@@ -74,3 +121,14 @@ imprimirTablero(tablero);
  * 
  * 
  */
+let contenedor2 = document.getElementById('tablero2');
+let tablero2 = new Tablero(10);
+
+
+tablero2.guardarBarcos(listaBarcos);
+tablero2.posicionarBarcosAleatorio();
+
+console.log(tablero);
+
+// Llamada a la función para mostrar el tablero en HTML
+imprimirTablero(tablero2, contenedor2);

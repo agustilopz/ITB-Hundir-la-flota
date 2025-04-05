@@ -48,20 +48,17 @@ export class Tablero {
 
     }
 
-    posicionarBarcos(orientacion, fila, columna) {
-        for (let barco of this.barcos) {
+    posicionarBarco(orientacion, fila, columna, barcoSelec) {
+        let barco = new Barco(barcoSelec.name, barcoSelec.size);
             let barcoColocado = false;
 
-            while (!barcoColocado) {
                 let hayEspacio = this.verificarEspacio(barco, orientacion, fila, columna);
 
                 if (hayEspacio) {
                     this.colocarBarco(barco, orientacion, fila, columna);
                     barcoColocado = true;
-                }
-            }
-
-        }
+                } else alert("No hay suficiente espacio para colocar este barco!");
+            
 
     }
 
