@@ -10,6 +10,7 @@ let jsonBarcos = `[
     { "name": "Destructor", "size": 2 }
 ]`;
 
+// Variables globales
 let barcoSeleccionado = null;
 let posicionamentBarco = 'V';
 
@@ -21,12 +22,7 @@ let tablero = new Tablero(10);
 console.log(tablero);
 
 
-//console.log(Math.random() < 0.5 ? 'H' : 'V');
-
 console.log(Math.floor(Math.random() * 10));
-
-//tablero.guardarBarcos(listaBarcos);
-//tablero.posicionarBarcosAleatorio();
 
 console.log(tablero);
 
@@ -46,15 +42,19 @@ function imprimirTablero(tablero, contenedor) {
                     alert("No has seleccionado ningún barco")
                 } else {
                 console.log(`Fila ${i}, columna ${j}`);
-                tablero.posicionarBarco(posicionamentBarco,i,j,barcoSeleccionado);
+                let barcoPosicionado = tablero.posicionarBarco(posicionamentBarco,i,j,barcoSeleccionado);
+                // Si no se ha colocado el barco, volvemos a habilitar el button
+                if(!barcoPosicionado) {
+                    let botonBarco = document.getElementById(barcoSeleccionado.name.toLowerCase())
+                    botonBarco.disabled = false;
+                    console.log(barcoSeleccionado)
+                }
                 barcoSeleccionado = null;
                 imprimirTablero(tablero, contenedor);
                 }
+                console.log(barcoSeleccionado)
             });
 
-
-            //celdaDiv.dataset.x = celda.x;
-            //celdaDiv.dataset.y = celda.y;
 
             // Si la celda está ocupada por un barco, mostrar la inicial del barco
             if (celda.nombreBarco) {
@@ -81,7 +81,7 @@ for(let barco of listaBarcos) {
     boton.id = barco.name.toLowerCase();
     boton.textContent = `${barco.name}-${barco.size}`;
     boton.addEventListener("click", function() {
-        alert("CLICKKKK");
+        alert("Has seleccionado el " + barco.name);
         barcoSeleccionado=barco;
         boton.disabled=true;
     })
@@ -90,6 +90,7 @@ for(let barco of listaBarcos) {
 
 }
 
+// Cambiamos la orientación al pulsar 'R'
 document.addEventListener("keypress", function(event){
 
     if(event.key === "R" || event.key === "r") {
@@ -98,29 +99,13 @@ document.addEventListener("keypress", function(event){
         } else {
             posicionamentBarco='V';
         }
-        alert(posicionamentBarco);
+        alert("Orientación: " + posicionamentBarco);
     }
 })
 
+//
 
 
-/***
- * 
- * 
- *      0   1   2   3   4   5   6   7   8   9
- *  0   -   -   -   -   -   -   -   -   -   -
- *  1   -   -   -   -   -   -   -   -   -   -
- *  2   -   -   -   -   -   -   -   -   -   -   
- *  3   -   -   -   -   -   -   -   -   -   -
- *  4   -   -   -   -   -   -   -   -   -   -
- *  5   -   -   -   -   -   -   -   -   -   -
- *  6   -   -   -   -   -   -   -   -   -   -
- *  7   -   -   -   -   -   -   -   -   -   -
- *  8   -   -   -   -   -   -   -   -   -   -
- *  9   -   -   -   -   -   -   -   -   -   -
- * 
- * 
- */
 let contenedor2 = document.getElementById('tablero2');
 let tablero2 = new Tablero(10);
 
@@ -130,5 +115,5 @@ tablero2.posicionarBarcosAleatorio();
 
 console.log(tablero);
 
-// Llamada a la función para mostrar el tablero en HTML
+// Llamada a la función para mostrar el tablero de la IA
 imprimirTablero(tablero2, contenedor2);

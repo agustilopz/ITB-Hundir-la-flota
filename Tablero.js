@@ -57,9 +57,12 @@ export class Tablero {
                 if (hayEspacio) {
                     this.colocarBarco(barco, orientacion, fila, columna);
                     barcoColocado = true;
-                } else alert("No hay suficiente espacio para colocar este barco!");
+                } else {
+                    barcoColocado = false;
+                    alert("No hay suficiente espacio para colocar este barco!"); 
+                }
             
-
+                return barcoColocado;
     }
 
     verificarEspacio(barco, orientacion, fila, columna) {
