@@ -65,25 +65,28 @@ export class Tablero {
                 return barcoColocado;
     }
 
-    verificarEspacio(barco, orientacion, fila, columna) {
+    verificarEspacioOLD(barco, orientacion, fila, columna) {
+
+        let esPortaaviones = barco.nombre === "Portaaviones";
+
         if (orientacion === "H") {
-            if (columna + barco.tamaño > this.tamaño) {
+            if (columna + barco.tamaño > this.tamaño || (esPortaaviones && fila + 1 >= this.tamaño)) {
                 return false;
             }
 
             for (let i = 0; i < barco.tamaño; i++) {
-                if (this.celdas[fila][columna + i].ocupada) {
+                if (this.celdas[fila][columna + i].ocupada || (esPortaaviones && this.celdas[fila + 1][columna + i].ocupada)) {
                     return false;
                 }
             }
 
         } else if (orientacion === "V") {
-            if (fila + barco.tamaño > this.tamaño) {
+            if (fila + barco.tamaño > this.tamaño || (esPortaaviones && columna + 1 >= this.tamaño)) {
                 return false;
             }
 
             for (let j = 0; j < barco.tamaño; j++) {
-                if (this.celdas[fila + j][columna].ocupada) {
+                if (this.celdas[fila + j][columna].ocupada || (esPortaaviones && this.celdas[fila + j][columna + 1].ocupada)) {
                     return false;
                 }
             }
@@ -93,18 +96,73 @@ export class Tablero {
 
     }
 
+    verificarEspacio(barco, orientacion, fila, columna) {
+        const esPortaaviones = barco.nombre === "Portaaviones";
+    
+        const comprobarZona = (x, y) => {
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    let nx = x + dx;
+                    let ny = y + dy;
+                    if (nx >= 0 && ny >= 0 && nx < this.tamaño && ny < this.tamaño) {
+                        if (this.celdas[nx][ny].ocupada) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        };
+    
+        if (orientacion === "H") {
+            if (columna + barco.tamaño > this.tamaño || (esPortaaviones && fila + 1 >= this.tamaño)) {
+                return false;
+            }
+    
+            for (let i = 0; i < barco.tamaño; i++) {
+                if (!comprobarZona(fila, columna + i)) return false;
+                if (esPortaaviones && !comprobarZona(fila + 1, columna + i)) return false;
+            }
+    
+        } else if (orientacion === "V") {
+            if (fila + barco.tamaño > this.tamaño || (esPortaaviones && columna + 1 >= this.tamaño)) {
+                return false;
+            }
+    
+            for (let j = 0; j < barco.tamaño; j++) {
+                if (!comprobarZona(fila + j, columna)) return false;
+                if (esPortaaviones && !comprobarZona(fila + j, columna + 1)) return false;
+            }
+        }
+    
+        return true;
+    }
+    
+
+
     colocarBarco(barco, orientacion, fila, columna) {
+        let esPortaaviones = barco.nombre === "Portaaviones";
         if(orientacion === "H") {
             for (let i = 0; i < barco.tamaño; i++) {
             this.celdas[fila][columna + i].ocupada = true;
             this.celdas[fila][columna + i].nombreBarco = barco.nombre;
             barco.posiciones.push({x: fila, y: columna + i});
+
+            if (esPortaaviones) {
+                this.celdas[fila + 1][columna + i].ocupada = true;
+                this.celdas[fila + 1][columna + i].nombreBarco = barco.nombre;
+            }
         }
      } else  {
             for (let j = 0; j < barco.tamaño; j++) {
              this.celdas[fila + j][columna].ocupada = true;
              this.celdas[fila + j][columna].nombreBarco = barco.nombre;
-             barco.posiciones.push({x: fila + j, y: columna});       
+             barco.posiciones.push({x: fila + j, y: columna});   
+             
+             if (esPortaaviones) {
+                this.celdas[fila + j][columna + 1].ocupada = true;
+                this.celdas[fila + j][columna + 1].nombreBarco = barco.nombre;
+            }
                 
             }
         }
