@@ -2,10 +2,15 @@ import { Tablero } from "./Tablero.js";
 import { Celda } from "./Celda.js";
 import { Barco } from "./Barco.js";
 
-let jsonBarcos = `[
+let jsonBarcosOLD = `[
     { "name": "Portaaviones", "size": 5 },
     { "name": "Acorazado", "size": 4 },
     { "name": "Crucero", "size": 3 },
+    { "name": "Submarino", "size": 3 },
+    { "name": "Destructor", "size": 2 }
+]`;
+
+let jsonBarcos = `[
     { "name": "Submarino", "size": 3 },
     { "name": "Destructor", "size": 2 }
 ]`;
@@ -34,8 +39,13 @@ function imprimirTablero(tablero, contenedor) {
         for (let j = 0; j < tablero.tamaño; j++) {
             let celda = tablero.celdas[i][j];
             let clase = celda.ocupada ? 'ocupada' : 'vacía'; // Dependiendo de si está ocupada o no, le asignamos una clase
+            //let clase2 = celda.impactada ? 'impactada': 'no-impactada';
+            //let clase3 = celda.barcoHundido ? 'hundido': 'no-hundido';
             let celdaDiv = document.createElement('div');
             celdaDiv.classList.add('celda', clase);
+            //celdaDiv.classList.add('celda', clase2);
+            //celdaDiv.classList.add('celda', clase3);
+            celdaDiv.classList.add('celda', celda.estado)
 
             celdaDiv.addEventListener("click", function(event) {
                 if(barcoSeleccionado===null) {
@@ -113,7 +123,34 @@ let tablero2 = new Tablero(10);
 tablero2.guardarBarcos(listaBarcos);
 tablero2.posicionarBarcosAleatorio();
 
-console.log(tablero);
+console.log("Tablero 2 (IA):");
+console.log(tablero2);
 
 // Llamada a la función para mostrar el tablero de la IA
 imprimirTablero(tablero2, contenedor2);
+
+
+let formulario= document.getElementById('disparosUsuario');
+formulario.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+
+    let formData = new FormData(formulario);
+
+    let x = formData.get('x');
+    let y = formData.get('y');
+
+    console.log('X: ', x);
+    console.log('Y: ', y);
+
+    tablero2.recibirDisparo(x,y);
+    imprimirTablero(tablero2, contenedor2);
+
+})
+
+
+//tablero2.recibirDisparo(1,2);
+//tablero2.recibirDisparo(0,2);
+//tablero2.recibirDisparo(2,3);
+//tablero2.recibirDisparo(3,5);
+

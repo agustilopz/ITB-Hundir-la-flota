@@ -23,9 +23,22 @@
     background-color: lightblue; /* Color de las celdas vacías */
 }
 
+
 .juego {
     display: flex;
     gap: 10px;
     justify-content: space-around;
 
+}
+
+.tocado {
+    background-color: orange;
+}
+
+.hundido {
+    background-color: red;
+}
+
+.agua {
+    background-color: rgb(55, 184, 227); /* Color de las celdas vacías */
 }

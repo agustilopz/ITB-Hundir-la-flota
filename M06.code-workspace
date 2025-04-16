@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../M06"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Hundir-la-flota"
+	}
+}

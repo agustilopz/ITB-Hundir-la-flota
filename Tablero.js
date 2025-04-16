@@ -145,22 +145,28 @@ export class Tablero {
         if(orientacion === "H") {
             for (let i = 0; i < barco.tamaño; i++) {
             this.celdas[fila][columna + i].ocupada = true;
+            this.celdas[fila][columna + i].estado = "ocupada";
             this.celdas[fila][columna + i].nombreBarco = barco.nombre;
             barco.posiciones.push({x: fila, y: columna + i});
+            barco.orientacion = "H";
 
             if (esPortaaviones) {
                 this.celdas[fila + 1][columna + i].ocupada = true;
+                this.celdas[fila + 1][columna + i].estado = "ocupada";
                 this.celdas[fila + 1][columna + i].nombreBarco = barco.nombre;
             }
         }
      } else  {
             for (let j = 0; j < barco.tamaño; j++) {
              this.celdas[fila + j][columna].ocupada = true;
+             this.celdas[fila + j][columna].estado = "ocupada";
              this.celdas[fila + j][columna].nombreBarco = barco.nombre;
              barco.posiciones.push({x: fila + j, y: columna});   
+             barco.orientacion = "V";
              
              if (esPortaaviones) {
                 this.celdas[fila + j][columna + 1].ocupada = true;
+                this.celdas[fila + j][columna + 1].estado = "ocupada";
                 this.celdas[fila + j][columna + 1].nombreBarco = barco.nombre;
             }
                 
@@ -170,6 +176,104 @@ export class Tablero {
 
     numeroRandom(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    recibirDisparo(fila, columna) {
+        if ((fila <= 9 && fila >= 0) && (columna <= 9 && columna >= 0)) {
+            if (this.celdas[fila][columna].ocupada) {
+                this.celdas[fila][columna].impactada = true;
+                this.celdas[fila][columna].estado = "tocado";
+                alert("Tocado!");
+                for (let barco of this.barcos) {
+                   // console.log(barco)
+                    let tocados = 0;
+                    if (barco.nombre == this.celdas[fila][columna].nombreBarco) {
+
+                        if (barco.orientacion == 'H') {
+                            // HORIZONTAL
+                            
+                            for (let i = barco.posiciones[0].y; i <=barco.posiciones[barco.tamaño - 1].y; i++) {
+                                fila = barco.posiciones[0].x;
+                                if (this.celdas[barco.posiciones[0].x][i].impactada == true) {
+                                    console.log("Tocados actuales: ",tocados);
+                                    tocados++;
+                                }
+
+                            }
+                           // console.log(barco.tamaño);
+                            if (tocados == barco.tamaño) {
+                                alert("Hundido")
+                                barco.hundido = true;
+                                for (let i = barco.posiciones[0].y; i <=barco.posiciones[barco.tamaño - 1].y; i++) {
+                                    if (this.celdas[barco.posiciones[0].x][i].impactada == true) {
+                                        this.celdas[barco.posiciones[0].x][i].barcoHundido = true;
+                                        this.celdas[barco.posiciones[0].x][i].estado = "hundido";
+                                    }
+    
+                                }
+
+                            };
+                            console.log("Posiciones tocadas", tocados)
+
+
+                        } else {
+                            // VERTICAL
+                             
+                            for (let i = barco.posiciones[0].x; i <=barco.posiciones[barco.tamaño - 1].x; i++) {
+                                fila = barco.posiciones[0].x;
+                                if (this.celdas[i][barco.posiciones[0].y].impactada == true) {
+                                    console.log("Tocados actuales: ",tocados);
+                                    tocados++;
+                                }
+
+                            }
+                           // console.log(barco.tamaño);
+                            if (tocados == barco.tamaño) {
+                                alert("Hundido")
+                                barco.hundido = true;
+                                for (let i = barco.posiciones[0].x; i <=barco.posiciones[barco.tamaño - 1].x; i++) {
+                                    if (this.celdas[i][barco.posiciones[0].y].impactada == true) {
+                                        this.celdas[i][barco.posiciones[0].y].barcoHundido = true;
+                                        this.celdas[i][barco.posiciones[0].y].estado = "hundido";
+                                    }
+    
+                                }
+
+                            };
+
+                        }
+                    }
+                }
+
+
+            } else {
+                alert("Agua!")
+                this.celdas[fila][columna].estado = "agua"
+
+
+            }
+            
+
+        }
+
+        this.comprobarEstadoPartida();
+
+    }
+
+    comprobarEstadoPartida() {
+    
+        let numBarcos = this.barcos.length;
+        console.log(numBarcos);
+        let barcosHundidos = 0;
+        for (let barco of this.barcos) {
+            if(barco.hundido == true) {
+                barcosHundidos++;
+            }
+
+        }
+        if(barcosHundidos==numBarcos) alert ("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!")
+        
     }
 
 
