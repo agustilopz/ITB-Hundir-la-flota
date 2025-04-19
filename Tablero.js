@@ -49,6 +49,7 @@ export class Tablero {
     }
 
     posicionarBarco(orientacion, fila, columna, barcoSelec) {
+        console.log("ypoooo",barcoSelec)
         let barco = new Barco(barcoSelec.name, barcoSelec.size);
             let barcoColocado = false;
 
@@ -56,6 +57,8 @@ export class Tablero {
 
                 if (hayEspacio) {
                     this.colocarBarco(barco, orientacion, fila, columna);
+                    // Añadir el nuevo barco a la lista de barcos del tablero
+                    this.barcos.push(barco);
                     barcoColocado = true;
                 } else {
                     barcoColocado = false;
@@ -179,8 +182,15 @@ export class Tablero {
     }
 
 
-    recibirDisparo(fila, columna) {
+    recibirDisparoOLD(fila, columna) {
+
         if ((fila <= 9 && fila >= 0) && (columna <= 9 && columna >= 0)) {
+            const celda = this.celdas[fila][columna];
+            
+            if (celda.estado === "agua" || celda.estado === "tocado" || celda.estado === "hundido") {
+                return "repetido"; // Ya disparado aquí
+            }
+
             if (this.celdas[fila][columna].ocupada) {
                 this.celdas[fila][columna].impactada = true;
                 this.celdas[fila][columna].estado = "tocado";
@@ -261,6 +271,56 @@ export class Tablero {
 
     }
 
+
+    recibirDisparo(fila, columna) {
+        let resultado = "agua"; // Por defecto
+    
+        if ((fila <= 9 && fila >= 0) && (columna <= 9 && columna >= 0)) {
+            const celda = this.celdas[fila][columna];
+    
+            if (celda.estado === "agua" || celda.estado === "tocado" || celda.estado === "hundido") {
+                return "repetido"; // Ya disparado aquí
+            }
+    
+            if (celda.ocupada) {
+                celda.impactada = true;
+                celda.estado = "tocado";
+                resultado = "tocado";
+    
+                for (let barco of this.barcos) {
+                    if (barco.nombre === celda.nombreBarco) {
+                        let tocados = 0;
+
+                        for (let pos of barco.posiciones) {
+                            if (this.celdas[pos.x][pos.y].impactada) {
+                                tocados++;
+                            }
+                        }
+    
+                        if (tocados === barco.tamaño) {
+                            resultado = "hundido";
+                            barco.hundido = true;
+    
+                            for (let pos of barco.posiciones) {
+                                const c = this.celdas[pos.x][pos.y];
+                                c.barcoHundido = true;
+                                c.estado = "hundido";
+                            }
+                        }
+                    }
+                }
+            } else {
+                celda.estado = "agua";
+            }
+        }
+    
+        this.comprobarEstadoPartida();
+        return resultado;
+    }
+
+
+
+
     comprobarEstadoPartida() {
     
         let numBarcos = this.barcos.length;
@@ -275,6 +335,78 @@ export class Tablero {
         if(barcosHundidos==numBarcos) alert ("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!")
         
     }
+
+    generarAtaqueIA() {
+        // 1. Buscar si hay un "tocado" no hundido y disparar cerca
+        for (let i = 0; i < this.tamaño; i++) {
+            for (let j = 0; j < this.tamaño; j++) {
+            const celda = this.celdas[i][j];
+                if(celda.estado == "tocado") {
+                const adyacentes = this.obtenerAdyacentes({ x: i, y: j });   
+                for (let ady of adyacentes) {
+                    const res = this.recibirDisparo(ady.x, ady.y);
+                    if (res !== "repetido") return; //  Disparó, fin del turno
+                }
+                }
+            }
+        }
+
+        // 2. Si no hay tocados, hacer disparo aleatorio único
+        let x, y, res;
+        do {
+            x = Math.floor(Math.random() * this.tamaño);
+            y = Math.floor(Math.random() * this.tamaño);
+            res = this.recibirDisparo(x, y);
+        } while (res === "repetido"); // Solo repite si ya disparó ahí
+
+        // 🔸 Fin del turno aunque sea agua
+}
+
+
+    obtenerAdyacentes(pos) {
+        const ady = [
+            { x: pos.x + 1, y: pos.y },
+            { x: pos.x - 1, y: pos.y },
+            { x: pos.x, y: pos.y + 1 },
+            { x: pos.x, y: pos.y - 1 },
+        ];
+        let disponibles = [];
+
+        for (let i = 0; i < ady.length; i++) {
+            let p = ady[i];
+            
+            if (this.enRango(p.x, p.y)) {
+                let estado = this.celdas[p.x][p.y].estado;
+                if (estado !== "agua" && estado !== "tocado" && estado !== "hundido") {
+                    disponibles.push(p);
+                }
+            }
+        }
+
+        return disponibles;
+    }
+
+    enRango(x, y) {
+        return x >= 0 && x < this.tamaño && y >= 0 && y < this.tamaño;
+    }
+
+
+    /***
+ * 
+ *      0   1   2   3   4   5   6   7   8   9     X
+ *  0   -   -   -   -   -   -   -   -   -   -
+ *  1   -   -   -   -   t   -   -   -   -   -
+ *  2   -   -   -   -   -   -   -   -   -   -   
+ *  3   t   -   -   -   -   -   -   -   -   -
+ *  4   -   -   -   -   -   -   -   -   -   -
+ *  5   -   -   -   -   -   -   -   -   -   -
+ *  6   -   -   -   -   -   -   -   -   -   -
+ *  7   -   -   -   -   -   -   -   -   -   -
+ *  8   -   -   -   -   -   -   -   -   -   -
+ *  9   -   -   -   -   -   -   t   -   -   -
+ *  
+ *  Y
+ */
 
 
 }

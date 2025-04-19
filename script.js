@@ -24,12 +24,14 @@ let listaBarcos = JSON.parse(jsonBarcos);
 console.log("Lista barcos convertida del JSON:" + listaBarcos);
 
 let tablero = new Tablero(10);
-console.log(tablero);
 
 
 console.log(Math.floor(Math.random() * 10));
+console.log("Tablero 1 (jugador):");
 
 console.log(tablero);
+
+//tablero.guardarBarcos(listaBarcos);
 
 function imprimirTablero(tablero, contenedor) {
 
@@ -95,6 +97,7 @@ for(let barco of listaBarcos) {
         barcoSeleccionado=barco;
         boton.disabled=true;
     })
+    console.log(barcoSeleccionado);
     
     contenedorBarcos.appendChild(boton);
 
@@ -149,8 +152,22 @@ formulario.addEventListener('submit', function(event) {
 })
 
 
+
+
 //tablero2.recibirDisparo(1,2);
 //tablero2.recibirDisparo(0,2);
 //tablero2.recibirDisparo(2,3);
 //tablero2.recibirDisparo(3,5);
+
+
+function disparoIA(){
+    console.log("boton ia presionado")
+tablero.generarAtaqueIA();
+imprimirTablero(tablero, contenedor1);
+
+
+}
+
+// Hacerla accesible globalmente
+window.disparoIA = disparoIA;
 
