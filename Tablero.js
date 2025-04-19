@@ -6,13 +6,14 @@ export class Tablero {
     celdas;
     barcos;
 
-    constructor(tamaño, celdas, barcos) {
+    constructor(tamaño) {
         this.tamaño = tamaño;
         this.celdas = [];
         this.barcos = [];
         this.crearTablero();
     }
 
+    // Crea un tablero virtual al inicializar un objeto de esta clase
     crearTablero() {
         for (let i = 0; i < this.tamaño; i++) {
             this.celdas[i] = [];
@@ -23,10 +24,12 @@ export class Tablero {
 
     }
 
+    // Guarda la lista de barcos pasada dentro de la propiedad barcos del tablero
     guardarBarcos(listaBarcos) {
         this.barcos = listaBarcos.map(barco => new Barco(barco.name, barco.size))
     }
 
+    // Posiciona todos los barcos de forma aleatoria (tablero IA)
     posicionarBarcosAleatorio() {
         for (let barco of this.barcos) {
             let barcoColocado = false;
@@ -48,8 +51,8 @@ export class Tablero {
 
     }
 
+    // Posiciona el barco pasado por parametro de forma manual (tablero jugador)
     posicionarBarco(orientacion, fila, columna, barcoSelec) {
-        console.log("ypoooo",barcoSelec)
         let barco = new Barco(barcoSelec.name, barcoSelec.size);
             let barcoColocado = false;
 
@@ -142,7 +145,7 @@ export class Tablero {
     }
     
 
-
+// Coloca el barco en la posición indicada
     colocarBarco(barco, orientacion, fila, columna) {
         let esPortaaviones = barco.nombre === "Portaaviones";
         if(orientacion === "H") {
@@ -279,7 +282,7 @@ export class Tablero {
             const celda = this.celdas[fila][columna];
     
             if (celda.estado === "agua" || celda.estado === "tocado" || celda.estado === "hundido") {
-                return "repetido"; // Ya disparado aquí
+                return "repetido"; // Ya ha disparado aquí
             }
     
             if (celda.ocupada) {
@@ -314,43 +317,45 @@ export class Tablero {
             }
         }
     
+        // Una vez terminado el turno, comprovamos si ya se ha terminado la partida
         this.comprobarEstadoPartida();
         return resultado;
     }
 
 
 
-
+// Comprueba si ya se han hundido todos los barcos de este tablero
     comprobarEstadoPartida() {
-    
+
         let numBarcos = this.barcos.length;
         console.log(numBarcos);
         let barcosHundidos = 0;
         for (let barco of this.barcos) {
-            if(barco.hundido == true) {
+            if (barco.hundido == true) {
                 barcosHundidos++;
             }
 
         }
-        if(barcosHundidos==numBarcos) alert ("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!")
-        
+        if (barcosHundidos == numBarcos) alert("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!")
+
     }
+
+
 
     generarAtaqueIA() {
         // 1. Buscar si hay un "tocado" no hundido y disparar cerca
         for (let i = 0; i < this.tamaño; i++) {
             for (let j = 0; j < this.tamaño; j++) {
-            const celda = this.celdas[i][j];
-                if(celda.estado == "tocado") {
-                const adyacentes = this.obtenerAdyacentes({ x: i, y: j });   
-                for (let ady of adyacentes) {
-                    const res = this.recibirDisparo(ady.x, ady.y);
-                    if (res !== "repetido") return; //  Disparó, fin del turno
-                }
+                const celda = this.celdas[i][j];
+                if (celda.estado == "tocado") {
+                    const adyacentes = this.obtenerAdyacentes({ x: i, y: j });
+                    for (let ady of adyacentes) {
+                        const res = this.recibirDisparo(ady.x, ady.y);
+                        if (res !== "repetido") return; //  Disparó, fin del turno
+                    }
                 }
             }
         }
-
         // 2. Si no hay tocados, hacer disparo aleatorio único
         let x, y, res;
         do {
@@ -359,9 +364,8 @@ export class Tablero {
             res = this.recibirDisparo(x, y);
         } while (res === "repetido"); // Solo repite si ya disparó ahí
 
-        // 🔸 Fin del turno aunque sea agua
-}
-
+        // Fin del turno aunque sea agua
+    }
 
     obtenerAdyacentes(pos) {
         const ady = [
@@ -374,7 +378,7 @@ export class Tablero {
 
         for (let i = 0; i < ady.length; i++) {
             let p = ady[i];
-            
+
             if (this.enRango(p.x, p.y)) {
                 let estado = this.celdas[p.x][p.y].estado;
                 if (estado !== "agua" && estado !== "tocado" && estado !== "hundido") {

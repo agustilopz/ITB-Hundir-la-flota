@@ -1,6 +1,3 @@
-import { Tablero } from "./Tablero.js";
-import { Barco } from "./Barco.js";
-
 export class Celda {
     x;
     y;
@@ -10,7 +7,7 @@ export class Celda {
     nombreBarco;
     estado;
 
-    constructor(x, y, ocupada, impactada, nombreBarco) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
         this.ocupada = false;

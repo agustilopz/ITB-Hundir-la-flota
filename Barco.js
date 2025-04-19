@@ -1,6 +1,3 @@
-import { Tablero } from "./Tablero.js";
-import { Celda } from "./Celda.js";
-
 export class Barco {
     nombre;
     tamaño;
@@ -8,7 +5,7 @@ export class Barco {
     orientacion;
     hundido;
 
-    constructor(nombre, tamaño, posiciones, orientacion) {
+    constructor(nombre, tamaño) {
         this.nombre = nombre;
         this.tamaño = tamaño;
         this.posiciones = [];
