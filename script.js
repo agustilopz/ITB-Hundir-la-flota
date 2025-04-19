@@ -9,6 +9,8 @@ let jsonBarcosOLD = `[
 ]`;
 
 let jsonBarcos = `[
+    { "name": "Acorazado", "size": 4 },
+    { "name": "Crucero", "size": 3 },
     { "name": "Submarino", "size": 3 },
     { "name": "Destructor", "size": 2 }
 ]`;
@@ -16,6 +18,7 @@ let jsonBarcos = `[
 // Variables globales
 let barcoSeleccionado = null;
 let posicionamentBarco = 'V';
+let modoJuego = "colocacion";
 
 let listaBarcos = JSON.parse(jsonBarcos);
 
@@ -23,6 +26,7 @@ let listaBarcos = JSON.parse(jsonBarcos);
 // TABLERO #1
 
 let tablero = new Tablero(10);
+tablero.guardarBarcos(listaBarcos);
 
 console.log("Tablero 1 (jugador):");
 
@@ -76,7 +80,7 @@ console.log("Tablero 2 (IA):");
 console.log(tablero2);
 
 // Llamada a la función para mostrar el tablero de la IA
-mostrarTableroHTML(tablero2, contenedor2);
+mostrarTableroHTML(tablero2, contenedor2, false);
 
 
 // Formulario de disparo del usuario
@@ -97,21 +101,22 @@ formulario.addEventListener('submit', function(event) {
 
 })
 
-function disparoIA(){
+function ataqueIA(){
     console.log("boton ia presionado")
-tablero.generarAtaqueIA();
+let disparoIA = tablero.generarAtaqueIA();
 mostrarTableroHTML(tablero, contenedor1);
 
+console.log(disparoIA);
+
+return disparoIA;
 
 }
 
 // Hacerla accesible globalmente
-window.disparoIA = disparoIA;
+window.ataqueIA = ataqueIA;
 
 //
-
-
-function mostrarTableroHTML(tablero, contenedor) {
+function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
     contenedor.innerHTML = '';
 
@@ -123,6 +128,8 @@ function mostrarTableroHTML(tablero, contenedor) {
             celdaDiv.classList.add('celda', clase);
             celdaDiv.classList.add('celda', celda.estado)
 
+            if(esJugador){
+            if(modoJuego === "colocacion") {
             // Añadimos el evento del click para soltar el barco
             celdaDiv.addEventListener("click", function(event) {
                 if(barcoSeleccionado===null) {
@@ -137,10 +144,45 @@ function mostrarTableroHTML(tablero, contenedor) {
                     console.log(barcoSeleccionado)
                 }
                 barcoSeleccionado = null;
+                if(tablero.todosLosBarcosColocados()) {
+                    alert("Todos los barcos han sido colocados!")
+                    modoJuego="ataque";
+                    // Actualizamos el tablero de la IA para añadir el evento de disapros
+                    mostrarTableroHTML(tablero2, contenedor2, false);
+                }
                 mostrarTableroHTML (tablero, contenedor);
                 }
                 console.log(barcoSeleccionado)
             });
+            }
+        }
+
+        if(!esJugador && modoJuego === "ataque") {
+
+           celdaDiv.addEventListener("click", function(event) {
+               let disparoJugador = tablero.recibirDisparo(i,j);
+                mostrarTableroHTML(tablero2, contenedor2, false);
+                // Si el jugador falla, es turno de la IA
+                if(disparoJugador == "agua") {
+                    // Función para realizar disparos de la IA con retraso
+                    function realizarDisparoIA() {
+                        setTimeout(() => {
+                            let disparoIA = ataqueIA();
+                            // Si ha acertado, programa otro disparo con retraso
+                            if(disparoIA == "tocado" || disparoIA == "hundido") {
+                                realizarDisparoIA(); // Llamada recursiva para el siguiente disparo
+                            }
+                        }, 1000); // Retraso de 1 segundo entre disparos
+                    }
+                    
+                    // Inicia la secuencia de disparos de la IA
+                    realizarDisparoIA();
+                }
+                
+
+            })
+            }
+        
 
 
             // Si la celda está ocupada por un barco, mostrar la inicial del barco
@@ -153,5 +195,4 @@ function mostrarTableroHTML(tablero, contenedor) {
         }
     }
 }
-
 

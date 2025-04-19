@@ -3,6 +3,7 @@ export class Barco {
     tamaño;
     posiciones;
     orientacion;
+    colocado;
     hundido;
 
     constructor(nombre, tamaño) {
@@ -11,5 +12,6 @@ export class Barco {
         this.posiciones = [];
         this.orientacion = "";
         this.hundido  = false;
+        this.colocado  = false;
     }
 }

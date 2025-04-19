@@ -53,7 +53,14 @@ export class Tablero {
 
     // Posiciona el barco pasado por parametro de forma manual (tablero jugador)
     posicionarBarco(orientacion, fila, columna, barcoSelec) {
-        let barco = new Barco(barcoSelec.name, barcoSelec.size);
+        let barco;
+        for (let b of this.barcos) {
+            if(b.nombre == barcoSelec.name) {
+                barco = b;
+            }
+
+        }
+        //let barco = new Barco(barcoSelec.name, barcoSelec.size);
             let barcoColocado = false;
 
                 let hayEspacio = this.verificarEspacio(barco, orientacion, fila, columna);
@@ -61,7 +68,7 @@ export class Tablero {
                 if (hayEspacio) {
                     this.colocarBarco(barco, orientacion, fila, columna);
                     // Añadir el nuevo barco a la lista de barcos del tablero
-                    this.barcos.push(barco);
+                    //this.barcos.push(barco);
                     barcoColocado = true;
                 } else {
                     barcoColocado = false;
@@ -69,6 +76,18 @@ export class Tablero {
                 }
             
                 return barcoColocado;
+    }
+
+
+    todosLosBarcosColocados() {
+        let barcosTotales = this.barcos.length;
+        let barcosColocados = 0;
+        for (let barco of this.barcos) {
+            if(barco.colocado) barcosColocados++;
+
+        }
+
+        return barcosColocados === barcosTotales;
     }
 
     verificarEspacioOLD(barco, orientacion, fila, columna) {
@@ -154,12 +173,15 @@ export class Tablero {
             this.celdas[fila][columna + i].estado = "ocupada";
             this.celdas[fila][columna + i].nombreBarco = barco.nombre;
             barco.posiciones.push({x: fila, y: columna + i});
+            barco.colocado = true;
             barco.orientacion = "H";
 
             if (esPortaaviones) {
                 this.celdas[fila + 1][columna + i].ocupada = true;
                 this.celdas[fila + 1][columna + i].estado = "ocupada";
                 this.celdas[fila + 1][columna + i].nombreBarco = barco.nombre;
+                barco.colocado = true;
+
             }
         }
      } else  {
@@ -168,12 +190,16 @@ export class Tablero {
              this.celdas[fila + j][columna].estado = "ocupada";
              this.celdas[fila + j][columna].nombreBarco = barco.nombre;
              barco.posiciones.push({x: fila + j, y: columna});   
+             barco.colocado = true;
+
              barco.orientacion = "V";
              
              if (esPortaaviones) {
                 this.celdas[fila + j][columna + 1].ocupada = true;
                 this.celdas[fila + j][columna + 1].estado = "ocupada";
                 this.celdas[fila + j][columna + 1].nombreBarco = barco.nombre;
+                barco.colocado = true;
+
             }
                 
             }
@@ -347,11 +373,13 @@ export class Tablero {
         for (let i = 0; i < this.tamaño; i++) {
             for (let j = 0; j < this.tamaño; j++) {
                 const celda = this.celdas[i][j];
-                if (celda.estado == "tocado") {
+                if (celda.estado == "tocado" && !celda.barcoHundido) {
                     const adyacentes = this.obtenerAdyacentes({ x: i, y: j });
                     for (let ady of adyacentes) {
                         const res = this.recibirDisparo(ady.x, ady.y);
-                        if (res !== "repetido") return; //  Disparó, fin del turno
+                        if (res !== "repetido") {
+                            return res; // Devuelve el resultado del disparo
+                        }
                     }
                 }
             }
@@ -365,6 +393,7 @@ export class Tablero {
         } while (res === "repetido"); // Solo repite si ya disparó ahí
 
         // Fin del turno aunque sea agua
+        return res;
     }
 
     obtenerAdyacentes(pos) {
