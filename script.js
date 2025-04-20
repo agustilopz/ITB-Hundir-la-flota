@@ -1,6 +1,6 @@
 import { Tablero } from "./Tablero.js";
 
-let jsonBarcosOLD = `[
+let jsonBarcos = `[
     { "name": "Portaaviones", "size": 5 },
     { "name": "Acorazado", "size": 4 },
     { "name": "Crucero", "size": 3 },
@@ -8,7 +8,7 @@ let jsonBarcosOLD = `[
     { "name": "Destructor", "size": 2 }
 ]`;
 
-let jsonBarcos = `[
+let jsonBarcosOLD = `[
     { "name": "Acorazado", "size": 4 },
     { "name": "Crucero", "size": 3 },
     { "name": "Submarino", "size": 3 },
@@ -19,6 +19,7 @@ let jsonBarcos = `[
 let barcoSeleccionado = null;
 let posicionamentBarco = 'V';
 let modoJuego = "colocacion";
+let turnoJugador = true;
 
 let listaBarcos = JSON.parse(jsonBarcos);
 
@@ -83,6 +84,7 @@ console.log(tablero2);
 mostrarTableroHTML(tablero2, contenedor2, false);
 
 
+/*
 // Formulario de disparo del usuario
 let formulario= document.getElementById('disparosUsuario');
 formulario.addEventListener('submit', function(event) {
@@ -100,6 +102,7 @@ formulario.addEventListener('submit', function(event) {
     mostrarTableroHTML(tablero2, contenedor2);
 
 })
+    */
 
 function ataqueIA(){
     console.log("boton ia presionado")
@@ -123,13 +126,12 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
     for (let i = 0; i < tablero.tamaño; i++) {
         for (let j = 0; j < tablero.tamaño; j++) {
             let celda = tablero.celdas[i][j];
-            let clase = celda.ocupada ? 'ocupada' : 'vacía'; // Dependiendo de si está ocupada o no, le asignamos una clase
+            let clase = (esJugador && celda.ocupada) ? 'ocupada' : 'vacía';  // Dependiendo de si está ocupada o no, le asignamos una clase
             let celdaDiv = document.createElement('div');
             celdaDiv.classList.add('celda', clase);
             celdaDiv.classList.add('celda', celda.estado)
 
-            if(esJugador){
-            if(modoJuego === "colocacion") {
+            if(esJugador && modoJuego === "colocacion") {
             // Añadimos el evento del click para soltar el barco
             celdaDiv.addEventListener("click", function(event) {
                 if(barcoSeleccionado===null) {
@@ -155,15 +157,16 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
                 console.log(barcoSeleccionado)
             });
             }
-        }
 
         if(!esJugador && modoJuego === "ataque") {
-
            celdaDiv.addEventListener("click", function(event) {
+            if (!turnoJugador) return; // No hace nada si no es el turno del jugador
                let disparoJugador = tablero.recibirDisparo(i,j);
                 mostrarTableroHTML(tablero2, contenedor2, false);
                 // Si el jugador falla, es turno de la IA
                 if(disparoJugador == "agua") {
+                    turnoJugador = false; // Bloquear turno del jugador
+                    actualizarIndicadorTurno();
                     // Función para realizar disparos de la IA con retraso
                     function realizarDisparoIA() {
                         setTimeout(() => {
@@ -171,6 +174,10 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
                             // Si ha acertado, programa otro disparo con retraso
                             if(disparoIA == "tocado" || disparoIA == "hundido") {
                                 realizarDisparoIA(); // Llamada recursiva para el siguiente disparo
+                            } else {
+                                turnoJugador = true; // Termina el turno de la IA
+                                actualizarIndicadorTurno();
+
                             }
                         }, 1000); // Retraso de 1 segundo entre disparos
                     }
@@ -184,15 +191,21 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
             }
         
 
-
+            if(esJugador || (!esJugador && celda.barcoHundido)) {
             // Si la celda está ocupada por un barco, mostrar la inicial del barco
             if (celda.nombreBarco) {
                 celdaDiv.textContent = celda.nombreBarco[0]; // Muestra la inicial del nombre del barco
             }
+                }
 
             // Añadir el div de la celda al contenedor
             contenedor.appendChild(celdaDiv);
         }
     }
+}
+
+function actualizarIndicadorTurno() {
+    const indicador = document.getElementById('indicador-turno');
+    indicador.textContent = `Turno: ${turnoJugador ? 'Jugador' : 'IA'}`;
 }
 

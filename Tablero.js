@@ -180,6 +180,8 @@ export class Tablero {
                 this.celdas[fila + 1][columna + i].ocupada = true;
                 this.celdas[fila + 1][columna + i].estado = "ocupada";
                 this.celdas[fila + 1][columna + i].nombreBarco = barco.nombre;
+                // Añadir también la segunda fila a las posiciones del barco
+                barco.posiciones.push({x: fila + 1, y: columna + i});
                 barco.colocado = true;
 
             }
@@ -191,13 +193,14 @@ export class Tablero {
              this.celdas[fila + j][columna].nombreBarco = barco.nombre;
              barco.posiciones.push({x: fila + j, y: columna});   
              barco.colocado = true;
-
              barco.orientacion = "V";
              
              if (esPortaaviones) {
                 this.celdas[fila + j][columna + 1].ocupada = true;
                 this.celdas[fila + j][columna + 1].estado = "ocupada";
                 this.celdas[fila + j][columna + 1].nombreBarco = barco.nombre;
+                // Añadir también la segunda columna a las posiciones del barco
+                barco.posiciones.push({x: fila + j, y: columna + 1});
                 barco.colocado = true;
 
             }
@@ -319,6 +322,7 @@ export class Tablero {
                 for (let barco of this.barcos) {
                     if (barco.nombre === celda.nombreBarco) {
                         let tocados = 0;
+                        let totalPosiciones = barco.posiciones.length;
 
                         for (let pos of barco.posiciones) {
                             if (this.celdas[pos.x][pos.y].impactada) {
@@ -326,7 +330,8 @@ export class Tablero {
                             }
                         }
     
-                        if (tocados === barco.tamaño) {
+                        // Si todas las celdas están tocadas, el barco está hundido
+                        if (tocados === totalPosiciones) {
                             resultado = "hundido";
                             barco.hundido = true;
     

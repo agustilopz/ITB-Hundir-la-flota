@@ -13,5 +13,6 @@ export class Barco {
         this.orientacion = "";
         this.hundido  = false;
         this.colocado  = false;
+        this.esPortaaviones = nombre === "Portaaviones";
     }
 }
