@@ -4,7 +4,10 @@
 
 async function guardarPartida(nombreJugador, tableroJugador, tableroIA) {
     const partida = {
-//DEBES DEFINIR AQUí LO QUE QUIERAS QUE TENGAS QUE GUARDAR
+    //DEBES DEFINIR AQUí LO QUE QUIERAS QUE TENGAS QUE GUARDAR
+    jugador: nombreJugador,
+    tableroJugador: JSON.stringify(tableroJugador),
+    tableroIA: JSON.stringify(tableroIA)    
     };
 
     try {
@@ -54,3 +57,11 @@ document.getElementById("btnCargar").addEventListener("click", async () => {
     // PROGRAMAR
     recuperaTablerosApi(partida);
 });
+
+
+function recuperaTablerosApi(partida) {
+
+let tableroJugador = partida.tableroJugador;
+let tableroIA = partida.tableroIA;
+
+}
