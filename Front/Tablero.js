@@ -2,11 +2,13 @@ import { Celda } from "./Celda.js";
 import { Barco } from "./Barco.js";
 
 export class Tablero {
+    nombreJugador;
     tamaño;
     celdas;
     barcos;
 
-    constructor(tamaño) {
+    constructor(nombreJugador, tamaño) {
+        this.nombreJugador = nombreJugador;
         this.tamaño = tamaño;
         this.celdas = [];
         this.barcos = [];
@@ -349,7 +351,9 @@ export class Tablero {
         }
     
         // Una vez terminado el turno, comprovamos si ya se ha terminado la partida
-        this.comprobarEstadoPartida();
+        if(this.comprobarEstadoPartida()){
+            alert("FINAL DE LA PARTIDA! " + this.nombreJugador + " HA PERDIDO")
+        };
         return resultado;
     }
 
@@ -367,7 +371,12 @@ export class Tablero {
             }
 
         }
-        if (barcosHundidos == numBarcos) alert("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!")
+        if (barcosHundidos == numBarcos) {
+            return true;
+            //alert("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!");
+        }
+
+        return false;
 
     }
 

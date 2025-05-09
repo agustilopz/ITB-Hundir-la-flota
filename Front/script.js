@@ -26,7 +26,7 @@ let listaBarcos = JSON.parse(jsonBarcos);
 
 // TABLERO #1
 
-let tablero = new Tablero(10);
+let tablero = new Tablero('Jugador', 10);
 tablero.guardarBarcos(listaBarcos);
 
 console.log("Tablero 1 (jugador):");
@@ -72,7 +72,7 @@ document.addEventListener("keypress", function(event){
 
 // TABLERO #2
 let contenedor2 = document.getElementById('tablero2');
-let tablero2 = new Tablero(10);
+let tablero2 = new Tablero('IA', 10);
 
 tablero2.guardarBarcos(listaBarcos);
 tablero2.posicionarBarcosAleatorio();
@@ -281,7 +281,7 @@ let tableroJugador = JSON.parse(partida.tableroJugador);
 let tableroIA = JSON.parse(partida.tableroIA);
 
 // TABLERO #1 //
-let tablero = new Tablero(10);
+let tablero = new Tablero('Jugador', 10);
 tablero.tamaño = tableroJugador.tamaño;
 tablero.celdas = tableroJugador.celdas;
 tablero.barcos = tableroJugador.barcos;
@@ -293,7 +293,7 @@ let contenedor1 = document.getElementById('tablero1');
 mostrarTableroHTML(tablero,contenedor1);
 
 // TABLERO #2
-let tablero2 = new Tablero(10);
+let tablero2 = new Tablero('IA', 10);
 tablero2.tamaño = tableroIA.tamaño;
 tablero2.celdas = tableroIA.celdas;
 tablero2.barcos = tableroIA.barcos;
