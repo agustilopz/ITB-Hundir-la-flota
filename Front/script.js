@@ -103,13 +103,43 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
     contenedor.innerHTML = '';
 
+    // Afegir cel·la buida a la cantonada superior esquerra
+    let cornerCell = document.createElement('div');
+    cornerCell.classList.add('celda', 'coordenada');
+    contenedor.appendChild(cornerCell);
+
+    // Afegir coordenades de columnes (A-J)
+    for (let j = 0; j < tablero.tamaño; j++) {
+        let coordCell = document.createElement('div');
+        coordCell.classList.add('celda', 'coordenada');
+        coordCell.textContent = String.fromCharCode(65 + j); // A-J
+        contenedor.appendChild(coordCell);
+    }
+
     for (let i = 0; i < tablero.tamaño; i++) {
+        // Afegir coordenada de fila (1-10)
+        let rowCoordCell = document.createElement('div');
+        rowCoordCell.classList.add('celda', 'coordenada');
+        rowCoordCell.textContent = i + 1;
+        contenedor.appendChild(rowCoordCell);
+
         for (let j = 0; j < tablero.tamaño; j++) {
             let celda = tablero.celdas[i][j];
-            let clase = (esJugador && celda.ocupada) ? 'ocupada' : 'vacía';  // Dependiendo de si está ocupada o no, le asignamos una clase
             let celdaDiv = document.createElement('div');
-            celdaDiv.classList.add('celda', clase);
-            celdaDiv.classList.add('celda', celda.estado)
+            celdaDiv.classList.add('celda');
+            
+            // Afegir classe segons l'estat de la cel·la
+            if (celda.estado === 'tocado') {
+                celdaDiv.classList.add('tocado');
+            } else if (celda.estado === 'hundido') {
+                celdaDiv.classList.add('hundido');
+            } else if (celda.estado === 'agua') {
+                celdaDiv.classList.add('agua');
+            } else if (esJugador && celda.ocupada) {
+                celdaDiv.classList.add('ocupada');
+            } else {
+                celdaDiv.classList.add('vacía');
+            }
 
             if(esJugador && modoJuego === "colocacion" && !partidaTerminada) {
             // Añadimos el evento del click para soltar el barco
