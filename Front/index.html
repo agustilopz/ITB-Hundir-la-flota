@@ -12,33 +12,37 @@
     <h1>Hundir la flota</h1>
     <div>
         <button id="btnGuardar">Guardar partida</button>
-        <button id="btnCargar">Cargar partida</button>
+        <button id="btnCargar">Ver resultado</button>
 
     </div><br>
     <div id="indicador-turno">Turno: Jugador</div>
     <section class="juego">
-        <div id="barcos"></div>
+        <div id="barcos">
+            
+        </div>
+        <div id="rotacion-hint" class="hint-message">
+            <span class="hint-icon">🔄</span> Presiona R para rotar el barco antes de colocarlo 
+            <span class="orientacion-actual">(Actual: Vertical)</span>
+        </div>
         
         <div class="tablero-container">
-            <h3>El teu taulell</h3>
+            <h3>Tu tablero</h3>
             <div id="tablero1"></div>
         </div>
         
         <div class="tablero-container">
-            <h3>Taulell enemic</h3>
+            <h3>Tablero enemigo</h3>
             <div id="tablero2"></div>
         </div>
     </section>
 
-    <!--
-    <div>
-        <h5>Instrucciones</h5>
-        <p>Para colocar los barcos, pulsa primero en el botón del barco deseado y luego pulsa en la casilla en que quieres colocar el barco. 
-        Para rotarlo presiona 'R' antes de colocarlo.
-        </p>
-        <p>Para atacar, haz click encima de la casilla del tablero enemigo que quieras atacar. Una vez etrminado tu turno, espero a que el enemigo haga su disparo</p>
+    <div class="instructions">
+        <h3>Instrucciones</h3>
+        <div class="instruction-content">
+            <p><i class="fas fa-map-marker-alt"></i> Para colocar los barcos, pulsa primero en el botón del barco deseado y luego pulsa en la casilla en que quieres colocar el barco. Para rotarlo presiona 'R' antes de colocarlo.</p>
+            <p><i class="fas fa-crosshairs"></i> Para atacar, haz click encima de la casilla del tablero enemigo que quieras atacar. Una vez terminado tu turno, espera a que el enemigo haga su disparo.</p>
+        </div>
     </div>
-    -->
     
 
     <!-- ------------------------------- Ventana emergente final ---------------------------------- -->
@@ -64,7 +68,6 @@
         </dialog>
     </div>
     <!-- ------------------------------------------------------------------------------------------- -->
-
 
 </body>
 </html>

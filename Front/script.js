@@ -41,7 +41,6 @@ for(let barco of listaBarcos) {
     boton.id = barco.name.toLowerCase();
     boton.textContent = `${barco.name}-${barco.size}`;
     boton.addEventListener("click", function() {
-        //alert("Has seleccionado el " + barco.name);
         barcoSeleccionado=barco;
         boton.disabled=true;
     })
@@ -58,7 +57,17 @@ document.addEventListener("keypress", function(event){
         } else {
             posicionamentBarco='V';
         }
-        alert("Orientación: " + posicionamentBarco);
+                // Actualiza el mensaje de la orientación
+                const orientacionActual = document.querySelector('.orientacion-actual');
+                const hintMessage = document.getElementById('rotacion-hint');
+                
+                orientacionActual.textContent = `(Actual: ${posicionamentBarco === 'V' ? 'Vertical' : 'Horizontal'})`;
+                hintMessage.classList.add('orientacion-cambiando');
+                
+                // Elimina la clase de animación después de que termine
+                setTimeout(() => {
+                    hintMessage.classList.remove('orientacion-cambiando');
+                }, 500);
     }
 })
 
@@ -80,9 +89,10 @@ mostrarTableroHTML(tablero2, contenedor2, false);
 function ataqueIA(){
     console.log("boton ia presionado")
 let disparoIA = tablero.generarAtaqueIA();
+if (disparoIA === "hundido") {
+    mostrarMensajeFlotante("¡La IA ha hundido uno de tus barcos!", "error");
+}
 if(tablero.comprobarEstadoPartida()) {
-    //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO") 
-    alert("FINAL DE LA PARTIDA! HAS PERIDO, LA MÁQUINA HA GANADO :(");
     gameOver();
     partidaTerminada = true;
 
@@ -145,21 +155,23 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
             // Añadimos el evento del click para soltar el barco
             celdaDiv.addEventListener("click", function(event) {
                 if(barcoSeleccionado===null) {
-                    alert("No has seleccionado ningún barco")
+                    mostrarMensajeFlotante("No has seleccionado ningún barco!", "error");
+
                 } else {
                 console.log(`Fila ${i}, columna ${j}`);
                 let barcoPosicionado = tablero.posicionarBarco(posicionamentBarco,i,j,barcoSeleccionado);
                 // Si no se ha colocado el barco, volvemos a habilitar el button
                 if(!barcoPosicionado) {
-                    alert("No hay suficiente espacio para colocar este barco!");
+                    mostrarMensajeFlotante("No hay suficiente espacio para colocar este barco!", "error");
                     let botonBarco = document.getElementById(barcoSeleccionado.name.toLowerCase())
                     botonBarco.disabled = false;
                     console.log(barcoSeleccionado)
                 }
                 barcoSeleccionado = null;
                 if(tablero.todosLosBarcosColocados()) {
-                    alert("Todos los barcos han sido colocados!")
+                    mostrarMensajeFlotante("Todos los barcos han sido colocados! Comienza la batalla", "success");
                     modoJuego="ataque";
+                    document.getElementById("rotacion-hint").style.display = "none";
                     // Actualizamos el tablero de la IA para añadir el evento de disapros
                     mostrarTableroHTML(tablero2, contenedor2, false);
                 }
@@ -173,9 +185,13 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
            celdaDiv.addEventListener("click", function(event) {
             if (!turnoJugador) return; // No hace nada si no es el turno del jugador
                let disparoJugador = tablero.recibirDisparo(i,j);
+               if (disparoJugador === "repetido") {
+                mostrarMensajeFlotante("Ya has disparado a esta posición", "warning");
+               }
+               if (disparoJugador === "hundido") {
+                mostrarMensajeFlotante("¡Hundido! Has destruido un barco enemigo", "success");
+            }
                if(tablero.comprobarEstadoPartida()) {
-                //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
-                alert("FINAL DE LA PARTIDA! HAS GANADO A LA MÁQUINA");
                 hasGanado();
                 partidaTerminada = true;
                }
@@ -253,10 +269,12 @@ async function guardarPartida(nombreJugador, tableroJugador, tableroIA) {
         if (!response.ok) throw new Error("Error al guardar la partida");
 
         const data = await response.json();
+        mostrarMensajeFlotante(`Partida guardada con ID: ${data.id}`, "success");
         console.log("Partida guardada con éxito:", data);
         return data.id; // ID de la partida
     } catch (err) {
         console.error("Error:", err);
+        mostrarMensajeFlotante("Error al guardar la partida", "error");
     }
 }
 
@@ -268,9 +286,11 @@ async function cargarPartida(idPartida) {
 
         const data = await response.json();
         console.log("Partida cargada:", data);
+        mostrarMensajeFlotante("Partida cargada con éxito", "success");
         return data;
     } catch (err) {
         console.error("Error:", err);
+        mostrarMensajeFlotante("Error al cargar la partida", "error");
     }
 }
 
@@ -356,4 +376,29 @@ function bloquearScroll() {
 }
 
 window.closeModal = closeModal;
+
+
+// Función para mostrar mensajes flotantes
+function mostrarMensajeFlotante(mensaje, tipo) {
+    // Crear el elemento del mensaje
+    const mensajeEl = document.createElement('div');
+    mensajeEl.className = `mensaje-flotante ${tipo}`;
+    mensajeEl.textContent = mensaje;
+    
+    // Añadir al DOM
+    document.body.appendChild(mensajeEl);
+    
+    // Mostrar con animación
+    setTimeout(() => {
+        mensajeEl.classList.add('visible');
+    }, 10);
+    
+    // Eliminar después de un tiempo
+    setTimeout(() => {
+        mensajeEl.classList.remove('visible');
+        setTimeout(() => {
+            document.body.removeChild(mensajeEl);
+        }, 500);
+    }, 3000);
+}
 
