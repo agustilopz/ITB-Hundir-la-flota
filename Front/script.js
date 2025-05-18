@@ -13,6 +13,7 @@ let barcoSeleccionado = null;
 let posicionamentBarco = 'V';
 let modoJuego = "colocacion";
 let turnoJugador = true;
+let partidaTerminada = false;
 
 let listaBarcos = JSON.parse(jsonBarcos);
 
@@ -40,7 +41,7 @@ for(let barco of listaBarcos) {
     boton.id = barco.name.toLowerCase();
     boton.textContent = `${barco.name}-${barco.size}`;
     boton.addEventListener("click", function() {
-        alert("Has seleccionado el " + barco.name);
+        //alert("Has seleccionado el " + barco.name);
         barcoSeleccionado=barco;
         boton.disabled=true;
     })
@@ -82,6 +83,8 @@ let disparoIA = tablero.generarAtaqueIA();
 if(tablero.comprobarEstadoPartida()) {
     //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO") 
     alert("FINAL DE LA PARTIDA! HAS PERIDO, LA MÁQUINA HA GANADO :(");
+    gameOver();
+    partidaTerminada = true;
 
 };
 mostrarTableroHTML(tablero, contenedor1);
@@ -108,7 +111,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
             celdaDiv.classList.add('celda', clase);
             celdaDiv.classList.add('celda', celda.estado)
 
-            if(esJugador && modoJuego === "colocacion") {
+            if(esJugador && modoJuego === "colocacion" && !partidaTerminada) {
             // Añadimos el evento del click para soltar el barco
             celdaDiv.addEventListener("click", function(event) {
                 if(barcoSeleccionado===null) {
@@ -136,13 +139,15 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
             });
             }
 
-        if(!esJugador && modoJuego === "ataque") {
+        if(!esJugador && modoJuego === "ataque" && !partidaTerminada) {
            celdaDiv.addEventListener("click", function(event) {
             if (!turnoJugador) return; // No hace nada si no es el turno del jugador
                let disparoJugador = tablero.recibirDisparo(i,j);
                if(tablero.comprobarEstadoPartida()) {
                 //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
                 alert("FINAL DE LA PARTIDA! HAS GANADO A LA MÁQUINA");
+                hasGanado();
+                partidaTerminada = true;
                }
                 mostrarTableroHTML(tablero2, contenedor2, false);
                 // Si el jugador falla, es turno de la IA
@@ -287,4 +292,38 @@ let contenedor2 = document.getElementById('tablero2');
 mostrarTableroHTML(tablero2,contenedor2, false);
 
 }
+
+
+
+/* ------------------------------------------------------------------------------------------------------- */
+/*-------------------------- Ventana emergente final ----------------------------*/
+// Esta función muestra la ventana emergente final si se ha ganado
+function hasGanado() {
+    const hasGanado = document.getElementById("hasGanado");
+    hasGanado.showModal();
+
+    bloquearScroll();
+}
+
+// Esta función muestra la ventana emergente final si se ha perdido
+function gameOver() {
+    const gameOver = document.getElementById("gameOver");
+    gameOver.showModal();
+    bloquearScroll();
+}
+
+// Esta función cierra la ventana emergente
+function closeModal(id) {
+    const dialog = document.getElementById(id);
+    dialog.close();
+    document.body.classList.remove("bloquear-scroll");
+}
+
+// Esta función bloqueo el scroll de la página
+function bloquearScroll() {
+    window.scrollTo(0, 0);
+    document.body.classList.add("bloquear-scroll");
+}
+
+window.closeModal = closeModal;
 

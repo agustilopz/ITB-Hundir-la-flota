@@ -32,5 +32,31 @@
     -->
     
 </section>
+
+    <!-- ------------------------------- Ventana emergente final ---------------------------------- -->
+    <div id="dialog">
+        <dialog id="hasGanado" class="dialog">
+            <div>
+                <h2>¡Felicidades! ¡Has ganado!</h2>
+            </div>
+            <div class="dialog-buttons">
+                <button onclick="location.reload()">Volver a jugar</button>
+                <button onclick="closeModal('hasGanado')">Guardar partida</button>
+            </div>
+        </dialog>
+
+        <dialog id="gameOver" class="dialog">
+            <div>
+                <h2>¡Game Over! ¡Has perdido!</h2>
+            </div>
+            <div class="dialog-buttons">
+                <button onclick="location.reload()">Volver a jugar</button>
+                <button onclick="closeModal('gameOver')">Guardar partida</button>
+            </div>
+        </dialog>
+    </div>
+    <!-- ------------------------------------------------------------------------------------------- -->
+
+
 </body>
 </html>
