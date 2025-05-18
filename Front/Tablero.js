@@ -91,6 +91,7 @@ export class Tablero {
         return barcosColocados === barcosTotales;
     }
 
+    /*
     verificarEspacioOLD(barco, orientacion, fila, columna) {
 
         let esPortaaviones = barco.nombre === "Portaaviones";
@@ -121,6 +122,7 @@ export class Tablero {
         return true;
 
     }
+        */
 
     verificarEspacio(barco, orientacion, fila, columna) {
         const esPortaaviones = barco.nombre === "Portaaviones";
@@ -214,7 +216,7 @@ export class Tablero {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-
+/*
     recibirDisparoOLD(fila, columna) {
 
         if ((fila <= 9 && fila >= 0) && (columna <= 9 && columna >= 0)) {
@@ -302,6 +304,7 @@ export class Tablero {
         this.comprobarEstadoPartida();
 
     }
+        */
 
 
     recibirDisparo(fila, columna) {
@@ -348,10 +351,6 @@ export class Tablero {
             }
         }
     
-        // Una vez terminado el turno, comprovamos si ya se ha terminado la partida
-        //if(this.comprobarEstadoPartida()){
-            //Final de la partida
-        //};
         return resultado;
     }
 
@@ -435,24 +434,5 @@ export class Tablero {
     enRango(x, y) {
         return x >= 0 && x < this.tamaño && y >= 0 && y < this.tamaño;
     }
-
-
-    /***
- * 
- *      0   1   2   3   4   5   6   7   8   9     X
- *  0   -   -   -   -   -   -   -   -   -   -
- *  1   -   -   -   -   t   -   -   -   -   -
- *  2   -   -   -   -   -   -   -   -   -   -   
- *  3   t   -   -   -   -   -   -   -   -   -
- *  4   -   -   -   -   -   -   -   -   -   -
- *  5   -   -   -   -   -   -   -   -   -   -
- *  6   -   -   -   -   -   -   -   -   -   -
- *  7   -   -   -   -   -   -   -   -   -   -
- *  8   -   -   -   -   -   -   -   -   -   -
- *  9   -   -   -   -   -   -   t   -   -   -
- *  
- *  Y
- */
-
 
 }

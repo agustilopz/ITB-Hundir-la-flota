@@ -108,7 +108,7 @@ return disparoIA;
 // Hacerla accesible globalmente
 window.ataqueIA = ataqueIA;
 
-//
+// Función para mostrar el tablero en el DOM (es muy larga, lo sé, pero me iba bien así :P)
 function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
     contenedor.innerHTML = '';
@@ -127,7 +127,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
     }
 
     for (let i = 0; i < tablero.tamaño; i++) {
-        // Afegir coordenada de fila (1-10)
+        // Añadir coordenada fila
         let rowCoordCell = document.createElement('div');
         rowCoordCell.classList.add('celda', 'coordenada');
         rowCoordCell.textContent = i + 1;
@@ -138,7 +138,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
             let celdaDiv = document.createElement('div');
             celdaDiv.classList.add('celda');
             
-            // Afegir classe segons l'estat de la cel·la
+            // Añadir clase según el estado de la celda
             if (celda.estado === 'tocado') {
                 celdaDiv.classList.add('tocado');
             } else if (celda.estado === 'hundido') {
@@ -219,11 +219,9 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
                     realizarDisparoIA();
                 }
                 
-
             })
             }
         
-
             if(esJugador || (!esJugador && celda.barcoHundido)) {
             // Si la celda está ocupada por un barco, mostrar la inicial del barco
             if (celda.nombreBarco) {
@@ -237,9 +235,69 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
     }
 }
 
+
+
+/* -------------------------------------------- */
+
 function actualizarIndicadorTurno() {
     const indicador = document.getElementById('indicador-turno');
     indicador.textContent = `Turno: ${turnoJugador ? 'Jugador' : 'IA'}`;
+}
+
+/*-------------------------- Ventana emergente final ----------------------------*/
+// Esta función muestra la ventana emergente final si se ha ganado
+function hasGanado() {
+    const hasGanado = document.getElementById("hasGanado");
+    hasGanado.showModal();
+
+    bloquearScroll();
+}
+
+// Esta función muestra la ventana emergente final si se ha perdido
+function gameOver() {
+    const gameOver = document.getElementById("gameOver");
+    gameOver.showModal();
+    bloquearScroll();
+}
+
+// Esta función cierra la ventana emergente
+function closeModal(id) {
+    const dialog = document.getElementById(id);
+    dialog.close();
+    document.body.classList.remove("bloquear-scroll");
+}
+
+// Esta función bloqueo el scroll de la página
+function bloquearScroll() {
+    window.scrollTo(0, 0);
+    document.body.classList.add("bloquear-scroll");
+}
+
+window.closeModal = closeModal;
+
+
+// ------------  Función para mostrar mensajes flotantes   -----------------
+function mostrarMensajeFlotante(mensaje, tipo) {
+    // Crear el elemento del mensaje
+    const mensajeEl = document.createElement('div');
+    mensajeEl.className = `mensaje-flotante ${tipo}`;
+    mensajeEl.textContent = mensaje;
+    
+    // Añadir al DOM
+    document.body.appendChild(mensajeEl);
+    
+    // Mostrar con animación
+    setTimeout(() => {
+        mensajeEl.classList.add('visible');
+    }, 10);
+    
+    // Eliminar después de un tiempo
+    setTimeout(() => {
+        mensajeEl.classList.remove('visible');
+        setTimeout(() => {
+            document.body.removeChild(mensajeEl);
+        }, 500);
+    }, 3000);
 }
 
 
@@ -346,59 +404,5 @@ mostrarTableroHTML(tablero2,contenedor2, false);
 
 
 /* ------------------------------------------------------------------------------------------------------- */
-/*-------------------------- Ventana emergente final ----------------------------*/
-// Esta función muestra la ventana emergente final si se ha ganado
-function hasGanado() {
-    const hasGanado = document.getElementById("hasGanado");
-    hasGanado.showModal();
 
-    bloquearScroll();
-}
-
-// Esta función muestra la ventana emergente final si se ha perdido
-function gameOver() {
-    const gameOver = document.getElementById("gameOver");
-    gameOver.showModal();
-    bloquearScroll();
-}
-
-// Esta función cierra la ventana emergente
-function closeModal(id) {
-    const dialog = document.getElementById(id);
-    dialog.close();
-    document.body.classList.remove("bloquear-scroll");
-}
-
-// Esta función bloqueo el scroll de la página
-function bloquearScroll() {
-    window.scrollTo(0, 0);
-    document.body.classList.add("bloquear-scroll");
-}
-
-window.closeModal = closeModal;
-
-
-// Función para mostrar mensajes flotantes
-function mostrarMensajeFlotante(mensaje, tipo) {
-    // Crear el elemento del mensaje
-    const mensajeEl = document.createElement('div');
-    mensajeEl.className = `mensaje-flotante ${tipo}`;
-    mensajeEl.textContent = mensaje;
-    
-    // Añadir al DOM
-    document.body.appendChild(mensajeEl);
-    
-    // Mostrar con animación
-    setTimeout(() => {
-        mensajeEl.classList.add('visible');
-    }, 10);
-    
-    // Eliminar después de un tiempo
-    setTimeout(() => {
-        mensajeEl.classList.remove('visible');
-        setTimeout(() => {
-            document.body.removeChild(mensajeEl);
-        }, 500);
-    }, 3000);
-}
 
