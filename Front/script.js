@@ -107,6 +107,7 @@ formulario.addEventListener('submit', function(event) {
 function ataqueIA(){
     console.log("boton ia presionado")
 let disparoIA = tablero.generarAtaqueIA();
+if(tablero.comprobarEstadoPartida()) alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
 mostrarTableroHTML(tablero, contenedor1);
 
 console.log(disparoIA);
@@ -141,6 +142,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
                 let barcoPosicionado = tablero.posicionarBarco(posicionamentBarco,i,j,barcoSeleccionado);
                 // Si no se ha colocado el barco, volvemos a habilitar el button
                 if(!barcoPosicionado) {
+                    alert("No hay suficiente espacio para colocar este barco!");
                     let botonBarco = document.getElementById(barcoSeleccionado.name.toLowerCase())
                     botonBarco.disabled = false;
                     console.log(barcoSeleccionado)
@@ -162,6 +164,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
            celdaDiv.addEventListener("click", function(event) {
             if (!turnoJugador) return; // No hace nada si no es el turno del jugador
                let disparoJugador = tablero.recibirDisparo(i,j);
+               if(tablero.comprobarEstadoPartida()) alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
                 mostrarTableroHTML(tablero2, contenedor2, false);
                 // Si el jugador falla, es turno de la IA
                 if(disparoJugador == "agua") {

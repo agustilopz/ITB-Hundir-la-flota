@@ -74,7 +74,6 @@ export class Tablero {
                     barcoColocado = true;
                 } else {
                     barcoColocado = false;
-                    alert("No hay suficiente espacio para colocar este barco!"); 
                 }
             
                 return barcoColocado;
@@ -228,7 +227,6 @@ export class Tablero {
             if (this.celdas[fila][columna].ocupada) {
                 this.celdas[fila][columna].impactada = true;
                 this.celdas[fila][columna].estado = "tocado";
-                alert("Tocado!");
                 for (let barco of this.barcos) {
                    // console.log(barco)
                     let tocados = 0;
@@ -247,7 +245,7 @@ export class Tablero {
                             }
                            // console.log(barco.tamaño);
                             if (tocados == barco.tamaño) {
-                                alert("Hundido")
+                                //Barco hundido
                                 barco.hundido = true;
                                 for (let i = barco.posiciones[0].y; i <=barco.posiciones[barco.tamaño - 1].y; i++) {
                                     if (this.celdas[barco.posiciones[0].x][i].impactada == true) {
@@ -274,7 +272,7 @@ export class Tablero {
                             }
                            // console.log(barco.tamaño);
                             if (tocados == barco.tamaño) {
-                                alert("Hundido")
+                                // Barco hundido
                                 barco.hundido = true;
                                 for (let i = barco.posiciones[0].x; i <=barco.posiciones[barco.tamaño - 1].x; i++) {
                                     if (this.celdas[i][barco.posiciones[0].y].impactada == true) {
@@ -292,7 +290,7 @@ export class Tablero {
 
 
             } else {
-                alert("Agua!")
+                // Agua
                 this.celdas[fila][columna].estado = "agua"
 
 
@@ -352,7 +350,7 @@ export class Tablero {
     
         // Una vez terminado el turno, comprovamos si ya se ha terminado la partida
         if(this.comprobarEstadoPartida()){
-            alert("FINAL DE LA PARTIDA! " + this.nombreJugador + " HA PERDIDO")
+            //Final de la partida
         };
         return resultado;
     }
@@ -373,7 +371,8 @@ export class Tablero {
         }
         if (barcosHundidos == numBarcos) {
             return true;
-            //alert("FINAL DE LA PARTIDA. TOTS ELS BARCOS ENFONSATS!");
+            // Final Partida
+
         }
 
         return false;
