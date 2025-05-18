@@ -349,9 +349,9 @@ export class Tablero {
         }
     
         // Una vez terminado el turno, comprovamos si ya se ha terminado la partida
-        if(this.comprobarEstadoPartida()){
+        //if(this.comprobarEstadoPartida()){
             //Final de la partida
-        };
+        //};
         return resultado;
     }
 

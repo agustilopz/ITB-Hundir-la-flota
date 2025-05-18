@@ -8,13 +8,6 @@ let jsonBarcos = `[
     { "name": "Destructor", "size": 2 }
 ]`;
 
-let jsonBarcosOLD = `[
-    { "name": "Acorazado", "size": 4 },
-    { "name": "Crucero", "size": 3 },
-    { "name": "Submarino", "size": 3 },
-    { "name": "Destructor", "size": 2 }
-]`;
-
 // Variables globales
 let barcoSeleccionado = null;
 let posicionamentBarco = 'V';
@@ -83,31 +76,14 @@ console.log(tablero2);
 // Llamada a la función para mostrar el tablero de la IA
 mostrarTableroHTML(tablero2, contenedor2, false);
 
-
-/*
-// Formulario de disparo del usuario
-let formulario= document.getElementById('disparosUsuario');
-formulario.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    let formData = new FormData(formulario);
-
-    let x = formData.get('x');
-    let y = formData.get('y');
-
-    console.log('X: ', x);
-    console.log('Y: ', y);
-
-    tablero2.recibirDisparo(x,y);
-    mostrarTableroHTML(tablero2, contenedor2);
-
-})
-    */
-
 function ataqueIA(){
     console.log("boton ia presionado")
 let disparoIA = tablero.generarAtaqueIA();
-if(tablero.comprobarEstadoPartida()) alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
+if(tablero.comprobarEstadoPartida()) {
+    //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO") 
+    alert("FINAL DE LA PARTIDA! HAS PERIDO, LA MÁQUINA HA GANADO :(");
+
+};
 mostrarTableroHTML(tablero, contenedor1);
 
 console.log(disparoIA);
@@ -164,7 +140,10 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
            celdaDiv.addEventListener("click", function(event) {
             if (!turnoJugador) return; // No hace nada si no es el turno del jugador
                let disparoJugador = tablero.recibirDisparo(i,j);
-               if(tablero.comprobarEstadoPartida()) alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
+               if(tablero.comprobarEstadoPartida()) {
+                //alert("FINAL DE LA PARTIDA! " + tablero.nombreJugador + " HA PERDIDO");
+                alert("FINAL DE LA PARTIDA! HAS GANADO A LA MÁQUINA");
+               }
                 mostrarTableroHTML(tablero2, contenedor2, false);
                 // Si el jugador falla, es turno de la IA
                 if(disparoJugador == "agua") {
