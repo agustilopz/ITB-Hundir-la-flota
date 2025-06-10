@@ -105,7 +105,8 @@ return disparoIA;
 window.ataqueIA = ataqueIA;
 
 // -------------------- Funciones para mostrar el tablero -------------------- //
-// Función para mostrar el tablero en el DOM (es muy larga, lo sé, pero me iba bien así :P)
+// Función para mostrar el tablero en el DOM
+// TO-DO: Dividir en funciones más pequeñas
 function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
     contenedor.innerHTML = '';
@@ -354,8 +355,8 @@ document.getElementById("btnGuardar").addEventListener("click", () => {
 document.getElementById("btnCargar").addEventListener("click", async () => {
     const id = prompt("Introduce el ID de la partida:");
     const partida = await cargarPartida(id);
-    // Llamamos a la función que recupera los tableros 
     
+    // Llamamos a la función que recupera los tableros 
     recuperaTablerosApi(partida);
 });
 
