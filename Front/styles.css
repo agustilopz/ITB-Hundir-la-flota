@@ -1,4 +1,4 @@
-/* Estils generals */
+/* Estilos generales */
 body {
     font-family: 'Segoe UI', sans-serif;
     background: #0e1a2b;
@@ -18,7 +18,7 @@ h1 {
     text-shadow: 0 0 8px rgba(79, 209, 197, 0.3);
 }
 
-/* Contenidor de botons */
+/* Contenedor de botones */
 div:has(button) {
     display: flex;
     gap: 10px;
@@ -56,7 +56,7 @@ button:disabled {
     border: 1px solid #4fd1c5;
 }
 
-/* Estructura del joc */
+/* Estructura del juego */
 .juego {
     display: flex;
     flex-wrap: wrap;
@@ -76,7 +76,7 @@ button:disabled {
     width: 100%;
 }
 
-/* Taulells amb coordenades integrades */
+/* Tableros con coordenadas integradas */
 .tablero-container {
     position: relative;
     background-color: rgba(30, 58, 95, 0.5);
@@ -99,7 +99,7 @@ button:disabled {
     gap: 1px;
 }
 
-/* Cel·les amb coordenades integrades */
+/* Celdas con coordenadas integradas */
 .celda {
     width: 30px;
     height: 30px;
@@ -113,7 +113,7 @@ button:disabled {
     user-select: none;
 }
 
-/* Estils especials per coordenades */
+/* Estilos especiales para coordenadas */
 .coordenada {
     background-color: transparent !important;
     border: none !important;
@@ -121,7 +121,7 @@ button:disabled {
     font-size: 0.7rem;
 }
 
-/* Estats de les cel·les */
+/* Estados de las celdas */
 .ocupada {
     background-color: #38b2ac;
     color: white;
@@ -156,7 +156,7 @@ button:disabled {
     animation: sink 0.5s forwards;
 }
 
-/* Diàlegs */
+/* Diálogos */
 .dialog {
     background-color: #2d3748;
     color: white;
@@ -199,7 +199,7 @@ button:disabled {
     }
 }
 
-/* Estils per a la secció d'instruccions */
+/* Estilos para la sección de instrucciones */
 .instructions {
     background-color: rgba(30, 58, 95, 0.7);
     border: 1px solid #4fd1c5;
@@ -335,7 +335,6 @@ button:disabled {
     50% { background-color: rgba(79, 209, 197, 0.3); }
     100% { background-color: rgba(79, 209, 197, 0.15); }
 }
-
 
 
 /* Mensajes flotantes */

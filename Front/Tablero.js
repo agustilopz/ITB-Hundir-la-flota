@@ -91,39 +91,6 @@ export class Tablero {
         return barcosColocados === barcosTotales;
     }
 
-    /*
-    verificarEspacioOLD(barco, orientacion, fila, columna) {
-
-        let esPortaaviones = barco.nombre === "Portaaviones";
-
-        if (orientacion === "H") {
-            if (columna + barco.tamaño > this.tamaño || (esPortaaviones && fila + 1 >= this.tamaño)) {
-                return false;
-            }
-
-            for (let i = 0; i < barco.tamaño; i++) {
-                if (this.celdas[fila][columna + i].ocupada || (esPortaaviones && this.celdas[fila + 1][columna + i].ocupada)) {
-                    return false;
-                }
-            }
-
-        } else if (orientacion === "V") {
-            if (fila + barco.tamaño > this.tamaño || (esPortaaviones && columna + 1 >= this.tamaño)) {
-                return false;
-            }
-
-            for (let j = 0; j < barco.tamaño; j++) {
-                if (this.celdas[fila + j][columna].ocupada || (esPortaaviones && this.celdas[fila + j][columna + 1].ocupada)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-
-    }
-        */
-
     verificarEspacio(barco, orientacion, fila, columna) {
         const esPortaaviones = barco.nombre === "Portaaviones";
     
@@ -216,97 +183,7 @@ export class Tablero {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-/*
-    recibirDisparoOLD(fila, columna) {
-
-        if ((fila <= 9 && fila >= 0) && (columna <= 9 && columna >= 0)) {
-            const celda = this.celdas[fila][columna];
-            
-            if (celda.estado === "agua" || celda.estado === "tocado" || celda.estado === "hundido") {
-                return "repetido"; // Ya disparado aquí
-            }
-
-            if (this.celdas[fila][columna].ocupada) {
-                this.celdas[fila][columna].impactada = true;
-                this.celdas[fila][columna].estado = "tocado";
-                for (let barco of this.barcos) {
-                   // console.log(barco)
-                    let tocados = 0;
-                    if (barco.nombre == this.celdas[fila][columna].nombreBarco) {
-
-                        if (barco.orientacion == 'H') {
-                            // HORIZONTAL
-                            
-                            for (let i = barco.posiciones[0].y; i <=barco.posiciones[barco.tamaño - 1].y; i++) {
-                                fila = barco.posiciones[0].x;
-                                if (this.celdas[barco.posiciones[0].x][i].impactada == true) {
-                                    console.log("Tocados actuales: ",tocados);
-                                    tocados++;
-                                }
-
-                            }
-                           // console.log(barco.tamaño);
-                            if (tocados == barco.tamaño) {
-                                //Barco hundido
-                                barco.hundido = true;
-                                for (let i = barco.posiciones[0].y; i <=barco.posiciones[barco.tamaño - 1].y; i++) {
-                                    if (this.celdas[barco.posiciones[0].x][i].impactada == true) {
-                                        this.celdas[barco.posiciones[0].x][i].barcoHundido = true;
-                                        this.celdas[barco.posiciones[0].x][i].estado = "hundido";
-                                    }
-    
-                                }
-
-                            };
-                            console.log("Posiciones tocadas", tocados)
-
-
-                        } else {
-                            // VERTICAL
-                             
-                            for (let i = barco.posiciones[0].x; i <=barco.posiciones[barco.tamaño - 1].x; i++) {
-                                fila = barco.posiciones[0].x;
-                                if (this.celdas[i][barco.posiciones[0].y].impactada == true) {
-                                    console.log("Tocados actuales: ",tocados);
-                                    tocados++;
-                                }
-
-                            }
-                           // console.log(barco.tamaño);
-                            if (tocados == barco.tamaño) {
-                                // Barco hundido
-                                barco.hundido = true;
-                                for (let i = barco.posiciones[0].x; i <=barco.posiciones[barco.tamaño - 1].x; i++) {
-                                    if (this.celdas[i][barco.posiciones[0].y].impactada == true) {
-                                        this.celdas[i][barco.posiciones[0].y].barcoHundido = true;
-                                        this.celdas[i][barco.posiciones[0].y].estado = "hundido";
-                                    }
-    
-                                }
-
-                            };
-
-                        }
-                    }
-                }
-
-
-            } else {
-                // Agua
-                this.celdas[fila][columna].estado = "agua"
-
-
-            }
-            
-
-        }
-
-        this.comprobarEstadoPartida();
-
-    }
-        */
-
-
+    // Recibe un disparo en la celda indicada y devuelve el resultado del disparo
     recibirDisparo(fila, columna) {
         let resultado = "agua"; // Por defecto
     
@@ -366,14 +243,11 @@ export class Tablero {
             if (barco.hundido == true) {
                 barcosHundidos++;
             }
-
         }
         if (barcosHundidos == numBarcos) {
             return true;
             // Final Partida
-
         }
-
         return false;
 
     }

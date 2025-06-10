@@ -18,15 +18,13 @@ let partidaTerminada = false;
 let listaBarcos = JSON.parse(jsonBarcos);
 
 
-// TABLERO #1
+// -------------------- TABLERO #1 -------------------
 
 let tablero = new Tablero('Jugador', 10);
 tablero.guardarBarcos(listaBarcos);
 
 console.log("Tablero 1 (jugador):");
-
 console.log(tablero);
-
 
 let contenedor1 = document.getElementById('tablero1');
 
@@ -44,13 +42,11 @@ for(let barco of listaBarcos) {
         barcoSeleccionado=barco;
         boton.disabled=true;
     })
-    
     contenedorBarcos.appendChild(boton);
 }
 
 // Cambiamos la orientación al pulsar 'R'
 document.addEventListener("keypress", function(event){
-
     if(event.key === "R" || event.key === "r") {
         if(posicionamentBarco==='V') {
             posicionamentBarco='H';
@@ -73,7 +69,7 @@ document.addEventListener("keypress", function(event){
 
 //
 
-// TABLERO #2
+// ---------------------- TABLERO #2 -------------------
 let contenedor2 = document.getElementById('tablero2');
 let tablero2 = new Tablero('IA', 10);
 
@@ -108,17 +104,18 @@ return disparoIA;
 // Hacerla accesible globalmente
 window.ataqueIA = ataqueIA;
 
+// -------------------- Funciones para mostrar el tablero -------------------- //
 // Función para mostrar el tablero en el DOM (es muy larga, lo sé, pero me iba bien así :P)
 function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
     contenedor.innerHTML = '';
 
-    // Afegir cel·la buida a la cantonada superior esquerra
+    // Añadir celda vacía a la esquina superior izquierda
     let cornerCell = document.createElement('div');
     cornerCell.classList.add('celda', 'coordenada');
     contenedor.appendChild(cornerCell);
 
-    // Afegir coordenades de columnes (A-J)
+    // Añadir coordenadas de columnas (A-J)
     for (let j = 0; j < tablero.tamaño; j++) {
         let coordCell = document.createElement('div');
         coordCell.classList.add('celda', 'coordenada');
@@ -237,7 +234,7 @@ function mostrarTableroHTML(tablero, contenedor, esJugador=true) {
 
 
 
-/* -------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
 
 function actualizarIndicadorTurno() {
     const indicador = document.getElementById('indicador-turno');
@@ -301,15 +298,10 @@ function mostrarMensajeFlotante(mensaje, tipo) {
 }
 
 
-/* -------------------------------------- API ------------------------------------ */
-
-/***
- * CONEXIÓN A API
- */
+/* ------------------------- API para guardar/cargar partidas ------------------------- */
 
 async function guardarPartida(nombreJugador, tableroJugador, tableroIA) {
     const partida = {
-    //DEBES DEFINIR AQUí LO QUE QUIERAS QUE TENGAS QUE GUARDAR
     jugador: nombreJugador,
     tableroJugador: JSON.stringify(tableroJugador),
     tableroIA: JSON.stringify(tableroIA)    
@@ -354,7 +346,6 @@ async function cargarPartida(idPartida) {
 
 document.getElementById("btnGuardar").addEventListener("click", () => {
     const nombreJugador = prompt("Introduce tu nombre:");
-    //DEFINE AQUI LO QUE QUIERAS, PUEDES AÑADIR MAS PARAMETROS
     let tableroJugador = tablero;
     let tableroIA = tablero2;
     guardarPartida(nombreJugador, tableroJugador, tableroIA);
@@ -365,7 +356,6 @@ document.getElementById("btnCargar").addEventListener("click", async () => {
     const partida = await cargarPartida(id);
     // Llamamos a la función que recupera los tableros 
     
-    // PROGRAMAR
     recuperaTablerosApi(partida);
 });
 
@@ -400,9 +390,4 @@ let contenedor2 = document.getElementById('tablero2');
 mostrarTableroHTML(tablero2,contenedor2, false);
 
 }
-
-
-
-/* ------------------------------------------------------------------------------------------------------- */
-
 
