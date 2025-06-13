@@ -1,6 +1,6 @@
 # Hundir la Flota
 
-Este es un proyecto académico desarrollado para la asignatura de **M6 (Javascript)** del ciclo formativo de **Desarrollo de Aplicaciones Web (DAW)**. El objetivo es crear una versión web del clásico juego "Hundir la Flota" (Battleship), con funcionalidades modernas y una arquitectura dividida en frontend y backend.
+Este es un proyecto académico desarrollado para la asignatura de **M6 - Desarrollo en Entorno Cliente (Javascript)** del ciclo formativo de **Desarrollo de Aplicaciones Web (DAW)**. El objetivo es crear una versión web del clásico juego "Hundir la Flota" (Battleship), con funcionalidades modernas y una arquitectura dividida en frontend y backend.
 
 ## Descripción del proyecto
 
@@ -82,6 +82,6 @@ Abre el archivo `Front/index.html` en tu navegador (puedes hacer doble clic o us
 
 ## Créditos
 
-Proyecto realizado por Agustí López para la asignatura de **M6 (Javascript)** del ciclo **DAW**.
+Proyecto realizado por Agustí López para la asignatura de **M6- Desarrollo en Entorno Cliente (Javascript)** del ciclo **DAW**.
 
 ---
